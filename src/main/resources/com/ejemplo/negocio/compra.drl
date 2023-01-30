@@ -1,0 +1,23 @@
+package com.ejemplo.negocio
+ 
+import com.ejemplo.negocio.Cliente;
+import com.ejemplo.negocio.Compra;
+
+
+rule "Gasto superior a 1000 soles"
+    when
+        compra : Compra( importe > 1000, actCliente: cliente )
+    then
+        System.out.println( "El cliente " + actCliente.getNombre() + " ha gastado mas de 1000 soles." );
+        compra.setDescuento( compra.getDescuento() + compra.getImporte() * 0.05);
+        System.out.println( "Total a pagar: " + Double.toString(compra.getImporte() - compra.getDescuento()) + " soles." );
+end
+
+rule "Cliente registrado"
+    when
+    	compra : Compra( cliente.esRegistrado() == true, actCliente: cliente )
+    then
+        System.out.println( "El cliente " + actCliente.getNombre() + " está registrado." );
+        compra.setDescuento( compra.getDescuento() + compra.getImporte() * 0.05);
+        System.out.println( "Total a pagar: " + Double.toString(compra.getImporte() - compra.getDescuento()) + " soles." );
+end
